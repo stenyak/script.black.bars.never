@@ -71,15 +71,11 @@ class Player(xbmc.Player):
 
         # Capture another frame. after we have waited for transitions
         __myimage = self.CaptureFrame()
-        __ar185 = self.LineColorLessThan(__myimage, 0, 1, __threshold)
-        __ar200 = self.LineColorLessThan(__myimage, 1, 3, __threshold)
-        __ar235 = self.LineColorLessThan(__myimage, 1, 5, __threshold)
-
-        if __ar235:
+        if self.LineColorLessThan(__myimage, 1, 5, __threshold):
             __aspectratio = 235
-        elif __ar200:
+        elif self.LineColorLessThan(__myimage, 1, 3, __threshold):
             __aspectratio = 200
-        elif __ar185:
+        elif self.LineColorLessThan(__myimage, 0, 1, __threshold):
             __aspectratio = 185
 
         return __aspectratio
