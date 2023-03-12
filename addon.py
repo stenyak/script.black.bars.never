@@ -25,23 +25,18 @@ class Player(xbmc.Player):
         capturedImage = capture.getImage(2000)
         return capturedImage
 
-    ##############
-    #
-    # LineColorLessThan
-    #    _bArray: byte Array that contains the data we want to test
-    #    _lineStart: where to start testing
-    #    _lineCount: how many lines to test
-    #    _threshold: value to determine testing
+    # _bArray: byte Array that contains the data we want to test
+    # _lineStart: where to start testing
+    # _lineCount: how many lines to test
+    # _threshold: value to determine testing
     # returns: True False
-    ###############
-
     def LineColorLessThan(self, _bArray, _lineStart, _lineCount, _threshold):
         __sliceStart = _lineStart * CaptureWidth * 4
         __sliceEnd = (_lineStart + _lineCount) * CaptureWidth * 4
 
         # zero out the alpha channel
         i = __sliceStart + 3
-        while (i < __sliceEnd):
+        while i < __sliceEnd:
             _bArray[i] &= 0x00
             i += 4
 
@@ -50,13 +45,8 @@ class Player(xbmc.Player):
 
         return __result
 
-    ###############
-    #
-    # GetAspectRatioFromFrame
-    #   - returns Aspect ratio * 100 (i.e. 2.35 = 235)
-    #   Detects hardcoded black bars
-    ###############
-
+    # Returns Aspect ratio * 100 (i.e. 2.35 = 235)
+    # Detects hardcoded black bars
     def GetAspectRatioFromFrame(self):
         __aspectratio = int((capture.getAspectRatio() + 0.005) * 100)
         __threshold = 25
@@ -67,7 +57,7 @@ class Player(xbmc.Player):
         # screen capture and test for an image that is not dark in the 2.40
         # aspect ratio area. keep on capturing images until captured image
         # is not dark
-        while (True):
+        while True:
             __myimage = self.CaptureFrame()
             xbmc.log(line1, level=xbmc.LOGINFO)
 
@@ -85,13 +75,11 @@ class Player(xbmc.Player):
         __ar200 = self.LineColorLessThan(__myimage, 1, 3, __threshold)
         __ar235 = self.LineColorLessThan(__myimage, 1, 5, __threshold)
 
-        if (__ar235 == True):
+        if __ar235:
             __aspectratio = 235
-
-        elif (__ar200 == True):
+        elif __ar200:
             __aspectratio = 200
-
-        elif (__ar185 == True):
+        elif __ar185:
             __aspectratio = 185
 
         return __aspectratio
@@ -108,8 +96,8 @@ class Player(xbmc.Player):
 
         xbmc.log(line1, level=xbmc.LOGINFO)
 
-        if (aspectratio > 178):
-            zoom_amount = (aspectratio / 178)
+        if aspectratio > 178:
+            zoom_amount = aspectratio / 178
         else:
             zoom_amount = 1.0
 
@@ -118,13 +106,13 @@ class Player(xbmc.Player):
             xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
             notify("Black Bars were detected. Zoomed " + str(zoom_amount))
-        elif (aspectratio > 178):
+        elif aspectratio > 178:
             # this is an aspect ratio wider than 16:9, no black bars, we assume a 16:9 (1.77:1) display
             xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
-            if (zoom_amount <= 1.02):
+            if zoom_amount <= 1.02:
                 notify("Wide screen was detected. Slightly zoomed " + str(zoom_amount))
-            elif (zoom_amount > 1.02):
+            elif zoom_amount > 1.02:
                 notify("Wide screen was detected. Zoomed " + str(zoom_amount))
 
 p = Player()
