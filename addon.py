@@ -1,3 +1,5 @@
+import math
+
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -15,9 +17,19 @@ def notify(msg):
 class Player(xbmc.Player):
     def __init__(self):
         xbmc.Player.__init__(self)
+        self.reset()
+
+    def reset(self):
+        self.lowestZoom = math.inf
 
     def onAVStarted(self):
-        xbmc.log("AV playback started")
+        self.reset()
+        self.abolishBlackBars()
+
+    def onPlayBackStarted(self):
+        self.abolishBlackBars()
+
+    def onPlayBackResumed(self):
         self.abolishBlackBars()
 
     def CaptureFrame(self):
@@ -80,10 +92,12 @@ class Player(xbmc.Player):
         aspectratio = self.GetAspectRatioFromFrame()
         aspectratio2 = capture.getAspectRatio() + 0.005
         xbmc.log('Calculated Aspect Ratio = ' + str(aspectratio) + ' ' + 'Player Aspect Ratio = ' + str(aspectratio2), level=xbmc.LOGINFO)
-        if aspectratio > 1.78:
-            zoom_amount = aspectratio / 1.78
+        zoom_amount = max(1.0, aspectratio / 1.78)
+        if zoom_amount < self.lowestZoom:
+            # pick the lowest zoom seen yet, to correct false positives
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
             notify("Zoom: {:0.2f}".format(zoom_amount))
+            self.lowestZoom = zoom_amount
 
 p = Player()
 
