@@ -58,12 +58,6 @@ class Player(xbmc.Player):
     # Returns Aspect ratio (i.e. 2.35)
     # Detects hardcoded black bars
     def GetAspectRatioFromFrame(self):
-        __aspectratio = capture.getAspectRatio() + 0.005
-        __threshold = 25
-
-        line1 = 'Interim Aspect Ratio = ' + str(__aspectratio)
-        xbmc.log(line1, level=xbmc.LOGINFO)
-
         # wait for transitions by capturing images until captured image is not dark
         while True:
             __myimage = self.CaptureFrame()
@@ -79,6 +73,8 @@ class Player(xbmc.Player):
             __aspectratio = 2.00
         elif self.LineColorLessThan(__myimage, 0, 1):
             __aspectratio = 1.85
+        else:
+          __aspectratio = capture.getAspectRatio() + 0.005
 
         return __aspectratio
 
