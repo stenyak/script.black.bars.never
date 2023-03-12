@@ -99,17 +99,12 @@ class Player(xbmc.Player):
 
         if (aspectratio > 178) and (aspectratio2 == 178):
             # this is 16:9 and has hard coded black bars
-            xbmc.executeJSONRPC(
-                '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
-            notify("Black Bars were detected. Zoomed " + str(zoom_amount))
+            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
+            notify("Zoom: {:0.2f}".format(zoom_amount))
         elif aspectratio > 178:
             # this is an aspect ratio wider than 16:9, no black bars, we assume a 16:9 (1.77:1) display
-            xbmc.executeJSONRPC(
-                '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
-            if zoom_amount <= 1.02:
-                notify("Wide screen was detected. Slightly zoomed " + str(zoom_amount))
-            elif zoom_amount > 1.02:
-                notify("Wide screen was detected. Zoomed " + str(zoom_amount))
+            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
+            notify("Zoom: {:0.2f}".format(zoom_amount))
 
 p = Player()
 
