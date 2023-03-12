@@ -69,13 +69,10 @@ class Player(xbmc.Player):
         while True:
             __myimage = self.CaptureFrame()
             xbmc.log(line1, level=xbmc.LOGINFO)
-
+            xbmc.sleep(1000)
             __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2, __threshold)
-            if __middleScreenDark == False:
-                xbmc.sleep(1000)
+            if __middleScreenDark:
                 break
-            else:
-                xbmc.sleep(1000)
 
         # Capture another frame. after we have waited for transitions
         __myimage = self.CaptureFrame()
