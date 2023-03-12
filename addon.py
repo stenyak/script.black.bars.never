@@ -41,9 +41,7 @@ class Player(xbmc.Player):
             i += 4
 
         __imageLine = _bArray[__sliceStart:__sliceEnd]
-        __result = all([v < _threshold for v in __imageLine])
-
-        return __result
+        return all([v < _threshold for v in __imageLine])
 
     # Returns Aspect ratio (i.e. 2.35)
     # Detects hardcoded black bars
@@ -55,14 +53,12 @@ class Player(xbmc.Player):
         xbmc.log(line1, level=xbmc.LOGINFO)
 
         # screen capture and test for an image that is not dark in the 2.40
-        # aspect ratio area. keep on capturing images until captured image
-        # is not dark
+        # aspect ratio area. keep on capturing images until captured image is not dark
         while True:
             __myimage = self.CaptureFrame()
             xbmc.log(line1, level=xbmc.LOGINFO)
 
-            __middleScreenDark = self.LineColorLessThan(
-                __myimage, 7, 2, __threshold)
+            __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2, __threshold)
             if __middleScreenDark == False:
                 xbmc.sleep(1000)
                 break
