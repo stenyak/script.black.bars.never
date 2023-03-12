@@ -2,24 +2,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 
-import time
-import json
-import sys
-import os.path
-
-addon = xbmcaddon.Addon()
-addonversion = addon.getAddonInfo('version')
-addonid = addon.getAddonInfo('id')
-addonname = addon.getAddonInfo('name')
-addonPath = addon.getAddonInfo('path')
-
 monitor = xbmc.Monitor()
-
-LOG_NONE = 0
-LOG_ERROR = 1
-LOG_INFO = 2
-LOG_DEBUG = 3
-
 capture = xbmc.RenderCapture()
 myplayer = xbmc.Player()
 
@@ -130,9 +113,6 @@ class Player(xbmc.Player):
         else:
             zoom_amount = 1.0
 
-        # zoom in a sort of animated way, isn't working for now
-        iterations = (zoom_amount - 1) / 0.01
-        # for x in range(iterations):
         if (aspectratio > 178) and (aspectratio2 == 178):
             # this is 16:9 and has hard coded black bars
             xbmc.executeJSONRPC(
@@ -149,19 +129,6 @@ class Player(xbmc.Player):
             elif (zoom_amount > 1.02):
                 messages.append(
                     "Wide screen was detected. Zoomed " + str(zoom_amount))
-
-        # time.sleep(0.1)
-
-    def log(self, level, msg):
-        if level <= settings.logLevel:
-            if level == LOG_ERROR:
-                l = xbmc.LOGERROR
-            elif level == LOG_INFO:
-                l = xbmc.LOGINFO
-            elif level == LOG_DEBUG:
-                l = xbmc.LOGDEBUG
-            xbmc.log(str(msg), l)
-
 
 p = Player()
 
