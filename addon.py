@@ -9,8 +9,8 @@ myplayer = xbmc.Player()
 CaptureWidth = 48
 CaptureHeight = 54
 
-messages = []
-
+def notify(msg):
+    xbmcgui.Dialog().notification("BlackBarsNever", msg, None, 1000)
 
 class Player(xbmc.Player):
     def __init__(self):
@@ -117,18 +117,15 @@ class Player(xbmc.Player):
             # this is 16:9 and has hard coded black bars
             xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
-            messages.append(
-                "Black Bars were detected. Zoomed " + str(zoom_amount))
+            notify("Black Bars were detected. Zoomed " + str(zoom_amount))
         elif (aspectratio > 178):
             # this is an aspect ratio wider than 16:9, no black bars, we assume a 16:9 (1.77:1) display
             xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
             if (zoom_amount <= 1.02):
-                messages.append(
-                    "Wide screen was detected. Slightly zoomed " + str(zoom_amount))
+                notify("Wide screen was detected. Slightly zoomed " + str(zoom_amount))
             elif (zoom_amount > 1.02):
-                messages.append(
-                    "Wide screen was detected. Zoomed " + str(zoom_amount))
+                notify("Wide screen was detected. Zoomed " + str(zoom_amount))
 
 p = Player()
 
@@ -137,9 +134,3 @@ while not monitor.abortRequested():
     if monitor.waitForAbort(10):
         # Abort was requested while waiting. We should exit
         break
-
-    if (len(messages) > 0):
-        xbmcgui.Dialog().notification(
-            "BlackBarsNever", messages[0], None, 5000)
-
-        messages.pop(0)
