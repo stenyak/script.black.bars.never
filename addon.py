@@ -64,17 +64,15 @@ class Player(xbmc.Player):
         line1 = 'Interim Aspect Ratio = ' + str(__aspectratio)
         xbmc.log(line1, level=xbmc.LOGINFO)
 
-        # screen capture and test for an image that is not dark in the 2.40
-        # aspect ratio area. keep on capturing images until captured image is not dark
+        # wait for transitions by capturing images until captured image is not dark
         while True:
             __myimage = self.CaptureFrame()
-            xbmc.sleep(1000)
+            # test for darkness in the 2.40 aspect ratio area
             __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2, __threshold)
-            if __middleScreenDark:
+            if not __middleScreenDark:
                 break
+            xbmc.sleep(1000)
 
-        # Capture another frame. after we have waited for transitions
-        __myimage = self.CaptureFrame()
         if self.LineColorLessThan(__myimage, 1, 5, __threshold):
             __aspectratio = 2.35
         elif self.LineColorLessThan(__myimage, 1, 3, __threshold):
