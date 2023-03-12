@@ -84,18 +84,8 @@ class Player(xbmc.Player):
         aspectratio = self.GetAspectRatioFromFrame()
         aspectratio2 = int((capture.getAspectRatio() + 0.005) * 100)
         xbmc.log('Calculated Aspect Ratio = ' + str(aspectratio) + ' ' + 'Player Aspect Ratio = ' + str(aspectratio2), level=xbmc.LOGINFO)
-
         if aspectratio > 178:
             zoom_amount = aspectratio / 178
-        else:
-            zoom_amount = 1.0
-
-        if (aspectratio > 178) and (aspectratio2 == 178):
-            # this is 16:9 and has hard coded black bars
-            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
-            notify("Zoom: {:0.2f}".format(zoom_amount))
-        elif aspectratio > 178:
-            # this is an aspect ratio wider than 16:9, no black bars, we assume a 16:9 (1.77:1) display
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Player.SetViewMode", "params": {"viewmode": {"zoom": ' + str(zoom_amount) + ' }}, "id": 1}')
             notify("Zoom: {:0.2f}".format(zoom_amount))
 
