@@ -83,14 +83,7 @@ class Player(xbmc.Player):
     def abolishBlackBars(self):
         aspectratio = self.GetAspectRatioFromFrame()
         aspectratio2 = int((capture.getAspectRatio() + 0.005) * 100)
-
-        _info = xbmc.getInfoLabel('Player.Process(VideoDAR)')
-        _info2 = xbmc.getInfoLabel('Player.Process(videoheight)')
-        window_id = xbmcgui.getCurrentWindowId()
-        line1 = 'Calculated Aspect Ratio = ' + \
-            str(aspectratio) + ' ' + 'Player Aspect Ratio = ' + str(aspectratio2)
-
-        xbmc.log(line1, level=xbmc.LOGINFO)
+        xbmc.log('Calculated Aspect Ratio = ' + str(aspectratio) + ' ' + 'Player Aspect Ratio = ' + str(aspectratio2), level=xbmc.LOGINFO)
 
         if aspectratio > 178:
             zoom_amount = aspectratio / 178
