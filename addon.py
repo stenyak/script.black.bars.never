@@ -42,7 +42,7 @@ class Player(xbmc.Player):
     # _lineCount: how many lines to test
     # _threshold: value to determine testing
     # returns: True False
-    def LineColorLessThan(self, _bArray, _lineStart, _lineCount, _threshold):
+    def LineColorLessThan(self, _bArray, _lineStart, _lineCount, _threshold=25):
         __sliceStart = _lineStart * CaptureWidth * 4
         __sliceEnd = (_lineStart + _lineCount) * CaptureWidth * 4
 
@@ -68,16 +68,16 @@ class Player(xbmc.Player):
         while True:
             __myimage = self.CaptureFrame()
             # test for darkness in the 2.40 aspect ratio area
-            __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2, __threshold)
+            __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2)
             if not __middleScreenDark:
                 break
             xbmc.sleep(1000)
 
-        if self.LineColorLessThan(__myimage, 1, 5, __threshold):
+        if self.LineColorLessThan(__myimage, 1, 5):
             __aspectratio = 2.35
-        elif self.LineColorLessThan(__myimage, 1, 3, __threshold):
+        elif self.LineColorLessThan(__myimage, 1, 3):
             __aspectratio = 2.00
-        elif self.LineColorLessThan(__myimage, 0, 1, __threshold):
+        elif self.LineColorLessThan(__myimage, 0, 1):
             __aspectratio = 1.85
 
         return __aspectratio
