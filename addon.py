@@ -68,7 +68,6 @@ class Player(xbmc.Player):
         # aspect ratio area. keep on capturing images until captured image is not dark
         while True:
             __myimage = self.CaptureFrame()
-            xbmc.log(line1, level=xbmc.LOGINFO)
             xbmc.sleep(1000)
             __middleScreenDark = self.LineColorLessThan(__myimage, 7, 2, __threshold)
             if __middleScreenDark:
